@@ -1,7 +1,17 @@
 import SwiftUI
+import AppKit
+
+private final class GlitchFXAppDelegate: NSObject, NSApplicationDelegate {
+    func applicationDidFinishLaunching(_ notification: Notification) {
+        NSApp.setActivationPolicy(.regular)
+        NSApp.activate(ignoringOtherApps: true)
+    }
+}
 
 @main
 struct GlitchFXShowcaseApp: App {
+    @NSApplicationDelegateAdaptor(GlitchFXAppDelegate.self) private var appDelegate
+
     var body: some Scene {
         WindowGroup {
             ContentView()
@@ -138,6 +148,10 @@ struct ContentView: View {
                                     tint: CueColor.coral.color,
                                     cue: .delete
                                 ) { playCount += 1 }
+                            }
+
+                            LiquidGlassButtonExamples {
+                                playCount += 1
                             }
                         }
 
@@ -529,6 +543,104 @@ private struct OutcomeButton: View {
     }
 }
 
+private struct LiquidGlassButtonExamples: View {
+    let action: () -> Void
+
+    var body: some View {
+        VStack(alignment: .leading, spacing: 12) {
+            VStack(alignment: .leading, spacing: 3) {
+                Text("LIQUID GLASS VARIANTS")
+                    .font(.system(.caption2, design: .monospaced, weight: .bold))
+                    .tracking(1.1)
+                    .foregroundStyle(CueColor.lilac.color)
+                Text("Default, primary, success, and destructive treatments")
+                    .font(.caption)
+                    .foregroundStyle(.white.opacity(0.5))
+            }
+
+            groupedButtons
+        }
+    }
+
+    @ViewBuilder
+    private var groupedButtons: some View {
+        #if os(visionOS)
+        buttons
+        #else
+        if #available(iOS 26.0, macOS 26.0, tvOS 26.0, watchOS 26.0, *) {
+            GlassEffectContainer(spacing: 12) {
+                buttons
+            }
+        } else {
+            buttons
+        }
+        #endif
+    }
+
+    private var buttons: some View {
+        VStack(spacing: 12) {
+            HStack(spacing: 12) {
+                LiquidGlassDemoButton(
+                    title: "Preview",
+                    symbol: "play.fill",
+                    cue: .select,
+                    action: action
+                )
+                LiquidGlassDemoButton(
+                    title: "Create",
+                    symbol: "sparkles",
+                    cue: .sparkle,
+                    tint: CueColor.lilac.color,
+                    action: action
+                )
+            }
+
+            HStack(spacing: 12) {
+                LiquidGlassDemoButton(
+                    title: "Confirm",
+                    symbol: "checkmark",
+                    cue: .success,
+                    tint: CueColor.mint.color,
+                    action: action
+                )
+                LiquidGlassDemoButton(
+                    title: "Remove",
+                    symbol: "trash",
+                    cue: .delete,
+                    tint: CueColor.coral.color,
+                    action: action
+                )
+            }
+        }
+    }
+}
+
+private struct LiquidGlassDemoButton: View {
+    let title: String
+    let symbol: String
+    let cue: SoundCue
+    var tint: Color? = nil
+    let action: () -> Void
+
+    var body: some View {
+        Button(action: action) {
+            Label(title, systemImage: symbol)
+                .font(.subheadline.weight(.bold))
+                .frame(maxWidth: .infinity)
+                .padding(.vertical, 13)
+        }
+        .buttonStyle(
+            LiquidGlassSoundButtonStyle(
+                release: cue,
+                theme: .glass,
+                tint: tint,
+                cornerRadius: 17
+            )
+        )
+        .accessibilityLabel("Play \(title) Liquid Glass button sound")
+    }
+}
+
 private struct DirectionButton: View {
     let title: String
     let symbol: String
@@ -562,6 +674,9 @@ private struct CodeSample: View {
     private let code = """
     Button("Save") { save() }
       .buttonStyle(SoundButtonStyle(theme: .signature))
+
+    Button("Glass action") { performAction() }
+      .buttonStyle(LiquidGlassSoundButtonStyle(tint: .purple))
 
     Toggle("Focus", isOn: $focus)
       .soundEffect(.toggleOn, trigger: focus, theme: .soft)

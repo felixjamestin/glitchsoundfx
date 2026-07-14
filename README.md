@@ -88,6 +88,33 @@ Button("Save") { save() }
     )
 ```
 
+Use native Liquid Glass with the same press/release sound behavior:
+
+```swift
+Button("Glass action") {
+    performAction()
+} label: {
+    Label("Create", systemImage: "sparkles")
+        .padding(.horizontal, 18)
+        .padding(.vertical, 12)
+}
+.buttonStyle(
+    LiquidGlassSoundButtonStyle(
+        release: .sparkle,
+        theme: .glass,
+        tint: .purple,
+        hoverTint: .pink,
+        cornerRadius: 16
+    )
+)
+```
+
+`LiquidGlassSoundButtonStyle` uses native Liquid Glass on iOS,
+macOS, tvOS, and watchOS 26 or later. It falls back to an adaptive material on
+earlier releases and on visionOS, so the package can keep its existing minimum
+deployment targets. Building this API requires the SwiftUI SDK included with
+Xcode 26 or later.
+
 Or use the ready-made components:
 
 ```swift
