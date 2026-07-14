@@ -1,8 +1,31 @@
 import AVFAudio
+import SwiftUI
 import XCTest
 @testable import GlitchFX
 
 final class GlitchFXTests: XCTestCase {
+    @MainActor
+    func testLiquidGlassStyleAcceptsAppearanceOptions() {
+        _ = LiquidGlassSoundButtonStyle(
+            tint: .purple,
+            hoverTint: .pink,
+            cornerRadius: 18,
+            horizontalPadding: 20,
+            verticalPadding: 12,
+            borderColor: .white.opacity(0.2),
+            borderWidth: 1,
+            shadowColor: .black.opacity(0.2),
+            shadowRadius: 8,
+            shadowX: 1,
+            shadowY: 4,
+            hoverShadowColor: .pink.opacity(0.3),
+            hoverShadowRadius: 14,
+            hoverShadowX: 2,
+            hoverShadowY: 6,
+            hoverAnimationDuration: 0.18
+        )
+    }
+
     func testEveryCueHasAUsableRecipe() {
         for cue in SoundCue.allCases {
             XCTAssertFalse(cue.recipe.layers.isEmpty, "\(cue) has no layers")

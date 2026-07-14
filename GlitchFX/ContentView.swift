@@ -627,14 +627,22 @@ private struct LiquidGlassDemoButton: View {
             Label(title, systemImage: symbol)
                 .font(.subheadline.weight(.bold))
                 .frame(maxWidth: .infinity)
-                .padding(.vertical, 13)
         }
         .buttonStyle(
             LiquidGlassSoundButtonStyle(
                 release: cue,
                 theme: .glass,
                 tint: tint,
-                cornerRadius: 17
+                cornerRadius: 17,
+                horizontalPadding: 18,
+                verticalPadding: 13,
+                borderColor: .white.opacity(0.14),
+                borderWidth: 1,
+                shadowColor: .black.opacity(0.18),
+                shadowRadius: 8,
+                shadowY: 4,
+                hoverShadowRadius: 14,
+                hoverShadowY: 6
             )
         )
         .accessibilityLabel("Play \(title) Liquid Glass button sound")
@@ -676,7 +684,16 @@ private struct CodeSample: View {
       .buttonStyle(SoundButtonStyle(theme: .signature))
 
     Button("Glass action") { performAction() }
-      .buttonStyle(LiquidGlassSoundButtonStyle(tint: .purple))
+      .buttonStyle(
+        LiquidGlassSoundButtonStyle(
+          tint: .purple,
+          horizontalPadding: 18,
+          verticalPadding: 12,
+          shadowColor: .black.opacity(0.18),
+          shadowRadius: 8,
+          shadowY: 4
+        )
+      )
 
     Toggle("Focus", isOn: $focus)
       .soundEffect(.toggleOn, trigger: focus, theme: .soft)

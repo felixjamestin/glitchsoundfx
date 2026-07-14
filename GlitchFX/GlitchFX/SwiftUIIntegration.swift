@@ -107,6 +107,19 @@ public struct LiquidGlassSoundButtonStyle: ButtonStyle {
     private let tint: Color?
     private let hoverTint: Color?
     private let cornerRadius: CGFloat
+    private let horizontalPadding: CGFloat
+    private let verticalPadding: CGFloat
+    private let borderColor: Color?
+    private let borderWidth: CGFloat
+    private let shadowColor: Color
+    private let shadowRadius: CGFloat
+    private let shadowX: CGFloat
+    private let shadowY: CGFloat
+    private let hoverShadowColor: Color?
+    private let hoverShadowRadius: CGFloat
+    private let hoverShadowX: CGFloat
+    private let hoverShadowY: CGFloat
+    private let hoverAnimationDuration: TimeInterval
     private let soundscape: Soundscape
 
     @MainActor
@@ -117,6 +130,19 @@ public struct LiquidGlassSoundButtonStyle: ButtonStyle {
         tint: Color? = nil,
         hoverTint: Color? = nil,
         cornerRadius: CGFloat = 16,
+        horizontalPadding: CGFloat = 0,
+        verticalPadding: CGFloat = 0,
+        borderColor: Color? = nil,
+        borderWidth: CGFloat = 0,
+        shadowColor: Color = .clear,
+        shadowRadius: CGFloat = 0,
+        shadowX: CGFloat = 0,
+        shadowY: CGFloat = 0,
+        hoverShadowColor: Color? = nil,
+        hoverShadowRadius: CGFloat = 12,
+        hoverShadowX: CGFloat = 0,
+        hoverShadowY: CGFloat = 5,
+        hoverAnimationDuration: TimeInterval = 0.14,
         soundscape: Soundscape? = nil
     ) {
         pressCue = press
@@ -124,7 +150,20 @@ public struct LiquidGlassSoundButtonStyle: ButtonStyle {
         self.theme = theme
         self.tint = tint
         self.hoverTint = hoverTint
-        self.cornerRadius = cornerRadius
+        self.cornerRadius = max(0, cornerRadius)
+        self.horizontalPadding = max(0, horizontalPadding)
+        self.verticalPadding = max(0, verticalPadding)
+        self.borderColor = borderColor
+        self.borderWidth = max(0, borderWidth)
+        self.shadowColor = shadowColor
+        self.shadowRadius = max(0, shadowRadius)
+        self.shadowX = shadowX
+        self.shadowY = shadowY
+        self.hoverShadowColor = hoverShadowColor
+        self.hoverShadowRadius = max(0, hoverShadowRadius)
+        self.hoverShadowX = hoverShadowX
+        self.hoverShadowY = hoverShadowY
+        self.hoverAnimationDuration = max(0, hoverAnimationDuration)
         self.soundscape = soundscape ?? .shared
     }
 
@@ -137,6 +176,19 @@ public struct LiquidGlassSoundButtonStyle: ButtonStyle {
             tint: tint,
             hoverTint: hoverTint,
             cornerRadius: cornerRadius,
+            horizontalPadding: horizontalPadding,
+            verticalPadding: verticalPadding,
+            borderColor: borderColor,
+            borderWidth: borderWidth,
+            shadowColor: shadowColor,
+            shadowRadius: shadowRadius,
+            shadowX: shadowX,
+            shadowY: shadowY,
+            hoverShadowColor: hoverShadowColor,
+            hoverShadowRadius: hoverShadowRadius,
+            hoverShadowX: hoverShadowX,
+            hoverShadowY: hoverShadowY,
+            hoverAnimationDuration: hoverAnimationDuration,
             soundscape: soundscape
         )
     }
@@ -339,11 +391,43 @@ private struct LiquidGlassSoundButtonStyleBody: View {
     let tint: Color?
     let hoverTint: Color?
     let cornerRadius: CGFloat
+    let horizontalPadding: CGFloat
+    let verticalPadding: CGFloat
+    let borderColor: Color?
+    let borderWidth: CGFloat
+    let shadowColor: Color
+    let shadowRadius: CGFloat
+    let shadowX: CGFloat
+    let shadowY: CGFloat
+    let hoverShadowColor: Color?
+    let hoverShadowRadius: CGFloat
+    let hoverShadowX: CGFloat
+    let hoverShadowY: CGFloat
+    let hoverAnimationDuration: TimeInterval
     let soundscape: Soundscape
     @State private var isHovering = false
 
     var body: some View {
         styledLabel
+            .overlay {
+                if let borderColor, borderWidth > 0 {
+                    RoundedRectangle(cornerRadius: cornerRadius)
+                        .strokeBorder(borderColor, lineWidth: borderWidth)
+                }
+            }
+            .shadow(
+                color: shadowColor,
+                radius: shadowRadius,
+                x: shadowX,
+                y: shadowY
+            )
+            .shadow(
+                color: resolvedHoverShadowColor,
+                radius: isHovering ? hoverShadowRadius : 0,
+                x: hoverShadowX,
+                y: isHovering ? hoverShadowY : 0
+            )
+            .animation(.easeOut(duration: hoverAnimationDuration), value: isHovering)
             .onHover { isHovering = $0 }
             .background {
                 PressStateObserver(
@@ -362,18 +446,12 @@ private struct LiquidGlassSoundButtonStyleBody: View {
         fallbackLabel
         #else
         if #available(iOS 26.0, macOS 26.0, tvOS 26.0, watchOS 26.0, *) {
-            configuration.label
+            paddedLabel
                 .contentShape(.rect(cornerRadius: cornerRadius))
                 .glassEffect(
                     .regular.tint(glassTint),
                     in: .rect(cornerRadius: cornerRadius)
                 )
-                .shadow(
-                    color: hoverShadowColor,
-                    radius: isHovering ? 12 : 0,
-                    y: isHovering ? 5 : 0
-                )
-                .animation(.easeOut(duration: 0.14), value: isHovering)
         } else {
             fallbackLabel
         }
@@ -381,7 +459,7 @@ private struct LiquidGlassSoundButtonStyleBody: View {
     }
 
     private var fallbackLabel: some View {
-        configuration.label
+        paddedLabel
             .contentShape(.rect(cornerRadius: cornerRadius))
             .background(.regularMaterial, in: .rect(cornerRadius: cornerRadius))
             .overlay {
@@ -392,12 +470,12 @@ private struct LiquidGlassSoundButtonStyleBody: View {
                         .stroke(.white.opacity(0.14), lineWidth: 1)
                 }
             }
-            .shadow(
-                color: hoverShadowColor,
-                radius: isHovering ? 10 : 0,
-                y: isHovering ? 4 : 0
-            )
-            .animation(.easeOut(duration: 0.14), value: isHovering)
+    }
+
+    private var paddedLabel: some View {
+        configuration.label
+            .padding(.horizontal, horizontalPadding)
+            .padding(.vertical, verticalPadding)
     }
 
     private var glassTint: Color? {
@@ -414,9 +492,10 @@ private struct LiquidGlassSoundButtonStyleBody: View {
         return tint?.opacity(0.14) ?? .clear
     }
 
-    private var hoverShadowColor: Color {
+    private var resolvedHoverShadowColor: Color {
         guard isHovering else { return .clear }
-        return (hoverTint ?? tint ?? Color.accentColor).opacity(0.28)
+        return hoverShadowColor
+            ?? (hoverTint ?? tint ?? Color.accentColor).opacity(0.28)
     }
 }
 

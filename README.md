@@ -95,8 +95,6 @@ Button("Glass action") {
     performAction()
 } label: {
     Label("Create", systemImage: "sparkles")
-        .padding(.horizontal, 18)
-        .padding(.vertical, 12)
 }
 .buttonStyle(
     LiquidGlassSoundButtonStyle(
@@ -104,10 +102,28 @@ Button("Glass action") {
         theme: .glass,
         tint: .purple,
         hoverTint: .pink,
-        cornerRadius: 16
+        cornerRadius: 16,
+        horizontalPadding: 18,
+        verticalPadding: 12,
+        borderColor: .white.opacity(0.2),
+        borderWidth: 1,
+        shadowColor: .black.opacity(0.18),
+        shadowRadius: 8,
+        shadowY: 4,
+        hoverShadowColor: .pink.opacity(0.3),
+        hoverShadowRadius: 14,
+        hoverShadowY: 6,
+        hoverAnimationDuration: 0.18
     )
 )
 ```
+
+The style accepts separate horizontal and vertical padding, an optional border,
+a resting shadow, a hover shadow, and a configurable hover animation duration.
+Set either shadow radius to `0` to disable that shadow. `shadowX`, `shadowY`,
+`hoverShadowX`, and `hoverShadowY` control the corresponding offsets. When
+`hoverShadowColor` is omitted, the hover shadow is derived from `hoverTint`,
+`tint`, or the accent color.
 
 `LiquidGlassSoundButtonStyle` uses native Liquid Glass on iOS,
 macOS, tvOS, and watchOS 26 or later. It falls back to an adaptive material on
