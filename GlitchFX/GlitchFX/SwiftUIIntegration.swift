@@ -109,6 +109,13 @@ public struct LiquidGlassSoundButtonStyle: ButtonStyle {
     private let cornerRadius: CGFloat
     private let horizontalPadding: CGFloat
     private let verticalPadding: CGFloat
+    private let kerning: CGFloat?
+    private let fontSize: CGFloat?
+    private let fontColor: Color?
+    private let textShadowColor: Color?
+    private let textShadowRadius: CGFloat
+    private let textShadowX: CGFloat
+    private let textShadowY: CGFloat
     private let borderColor: Color?
     private let borderWidth: CGFloat
     private let shadowColor: Color
@@ -132,6 +139,13 @@ public struct LiquidGlassSoundButtonStyle: ButtonStyle {
         cornerRadius: CGFloat = 16,
         horizontalPadding: CGFloat = 0,
         verticalPadding: CGFloat = 0,
+        kerning: CGFloat? = nil,
+        fontSize: CGFloat? = nil,
+        fontColor: Color? = nil,
+        textShadowColor: Color? = nil,
+        textShadowRadius: CGFloat = 0,
+        textShadowX: CGFloat = 0,
+        textShadowY: CGFloat = 0,
         borderColor: Color? = nil,
         borderWidth: CGFloat = 0,
         shadowColor: Color = .clear,
@@ -153,6 +167,13 @@ public struct LiquidGlassSoundButtonStyle: ButtonStyle {
         self.cornerRadius = max(0, cornerRadius)
         self.horizontalPadding = max(0, horizontalPadding)
         self.verticalPadding = max(0, verticalPadding)
+        self.kerning = kerning
+        self.fontSize = fontSize.map { max(1, $0) }
+        self.fontColor = fontColor
+        self.textShadowColor = textShadowColor
+        self.textShadowRadius = max(0, textShadowRadius)
+        self.textShadowX = textShadowX
+        self.textShadowY = textShadowY
         self.borderColor = borderColor
         self.borderWidth = max(0, borderWidth)
         self.shadowColor = shadowColor
@@ -178,6 +199,13 @@ public struct LiquidGlassSoundButtonStyle: ButtonStyle {
             cornerRadius: cornerRadius,
             horizontalPadding: horizontalPadding,
             verticalPadding: verticalPadding,
+            kerning: kerning,
+            fontSize: fontSize,
+            fontColor: fontColor,
+            textShadowColor: textShadowColor,
+            textShadowRadius: textShadowRadius,
+            textShadowX: textShadowX,
+            textShadowY: textShadowY,
             borderColor: borderColor,
             borderWidth: borderWidth,
             shadowColor: shadowColor,
@@ -393,6 +421,13 @@ private struct LiquidGlassSoundButtonStyleBody: View {
     let cornerRadius: CGFloat
     let horizontalPadding: CGFloat
     let verticalPadding: CGFloat
+    let kerning: CGFloat?
+    let fontSize: CGFloat?
+    let fontColor: Color?
+    let textShadowColor: Color?
+    let textShadowRadius: CGFloat
+    let textShadowX: CGFloat
+    let textShadowY: CGFloat
     let borderColor: Color?
     let borderWidth: CGFloat
     let shadowColor: Color
@@ -473,9 +508,42 @@ private struct LiquidGlassSoundButtonStyleBody: View {
     }
 
     private var paddedLabel: some View {
-        configuration.label
+        kernedLabel
+            .shadow(
+                color: textShadowColor ?? .clear,
+                radius: textShadowRadius,
+                x: textShadowX,
+                y: textShadowY
+            )
             .padding(.horizontal, horizontalPadding)
             .padding(.vertical, verticalPadding)
+    }
+
+    @ViewBuilder
+    private var kernedLabel: some View {
+        if let kerning {
+            coloredLabel.kerning(kerning)
+        } else {
+            coloredLabel
+        }
+    }
+
+    @ViewBuilder
+    private var coloredLabel: some View {
+        if let fontColor {
+            fontSizedLabel.foregroundStyle(fontColor)
+        } else {
+            fontSizedLabel
+        }
+    }
+
+    @ViewBuilder
+    private var fontSizedLabel: some View {
+        if let fontSize {
+            configuration.label.font(.system(size: fontSize))
+        } else {
+            configuration.label
+        }
     }
 
     private var glassTint: Color? {

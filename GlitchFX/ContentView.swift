@@ -625,7 +625,7 @@ private struct LiquidGlassDemoButton: View {
     var body: some View {
         Button(action: action) {
             Label(title, systemImage: symbol)
-                .font(.subheadline.weight(.bold))
+                .fontWeight(.bold)
                 .frame(maxWidth: .infinity)
         }
         .buttonStyle(
@@ -636,6 +636,12 @@ private struct LiquidGlassDemoButton: View {
                 cornerRadius: 17,
                 horizontalPadding: 18,
                 verticalPadding: 13,
+                kerning: 0.35,
+                fontSize: 13,
+                fontColor: .white.opacity(0.94),
+                textShadowColor: .black.opacity(0.4),
+                textShadowRadius: 2,
+                textShadowY: 1,
                 borderColor: .white.opacity(0.14),
                 borderWidth: 1,
                 shadowColor: .black.opacity(0.18),
@@ -689,6 +695,12 @@ private struct CodeSample: View {
           tint: .purple,
           horizontalPadding: 18,
           verticalPadding: 12,
+          kerning: 0.4,
+          fontSize: 15,
+          fontColor: .white,
+          textShadowColor: .black.opacity(0.4),
+          textShadowRadius: 2,
+          textShadowY: 1,
           shadowColor: .black.opacity(0.18),
           shadowRadius: 8,
           shadowY: 4

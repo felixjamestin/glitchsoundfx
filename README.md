@@ -105,6 +105,12 @@ Button("Glass action") {
         cornerRadius: 16,
         horizontalPadding: 18,
         verticalPadding: 12,
+        kerning: 0.4,
+        fontSize: 15,
+        fontColor: .white,
+        textShadowColor: .black.opacity(0.4),
+        textShadowRadius: 2,
+        textShadowY: 1,
         borderColor: .white.opacity(0.2),
         borderWidth: 1,
         shadowColor: .black.opacity(0.18),
@@ -120,7 +126,10 @@ Button("Glass action") {
 
 The style accepts separate horizontal and vertical padding, an optional border,
 a resting shadow, a hover shadow, and a configurable hover animation duration.
-Set either shadow radius to `0` to disable that shadow. `shadowX`, `shadowY`,
+It can also apply `kerning`, `fontSize`, `fontColor`, and a text shadow to the
+button label. `textShadowRadius`, `textShadowX`, and `textShadowY` control that
+shadow. Leave the typography values as `nil` to preserve the label's own style.
+Set either button shadow radius to `0` to disable that shadow. `shadowX`, `shadowY`,
 `hoverShadowX`, and `hoverShadowY` control the corresponding offsets. When
 `hoverShadowColor` is omitted, the hover shadow is derived from `hoverTint`,
 `tint`, or the accent color.
