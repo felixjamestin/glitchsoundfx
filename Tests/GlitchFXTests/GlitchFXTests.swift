@@ -31,6 +31,7 @@ final class GlitchFXTests: XCTestCase {
             hoverShadowY: 6,
             hoverAnimationDuration: 0.18
         )
+        _ = LiquidGlassSoundButtonStyle(press: .press)
     }
 
     func testEveryCueHasAUsableRecipe() {
@@ -67,7 +68,15 @@ final class GlitchFXTests: XCTestCase {
     func testThemesProduceDifferentRecipes() {
         for cue in SoundCue.allCases {
             let recipes = SoundTheme.allCases.map { $0.recipe(for: cue) }
-            XCTAssertEqual(Set(recipes.map(\.masterGain)).count, SoundTheme.allCases.count)
+            for leftIndex in recipes.indices {
+                for rightIndex in recipes.index(after: leftIndex)..<recipes.endIndex {
+                    XCTAssertNotEqual(
+                        recipes[leftIndex],
+                        recipes[rightIndex],
+                        "\(cue) is identical in \(SoundTheme.allCases[leftIndex]) and \(SoundTheme.allCases[rightIndex])"
+                    )
+                }
+            }
         }
     }
 
@@ -82,6 +91,43 @@ final class GlitchFXTests: XCTestCase {
                 SoundTheme.wonderland.recipe(for: cue).layers.count,
                 cue.recipe.layers.count,
                 "Wonderland needs an authored gesture for \(cue)"
+            )
+        }
+    }
+
+    func testWoodlandThemeAlwaysCombinesGrainAndTimberResonance() {
+        for cue in SoundCue.allCases {
+            let layers = SoundTheme.woodland.recipe(for: cue).layers
+            let hasGrain = layers.contains { layer in
+                if case .noise = layer { return true }
+                return false
+            }
+            let hasTimberBody = layers.contains { layer in
+                if case let .tone(tone) = layer { return tone.waveform == .triangle }
+                return false
+            }
+
+            XCTAssertTrue(hasGrain, "Woodland needs a grain transient for \(cue)")
+            XCTAssertTrue(hasTimberBody, "Woodland needs a resonant timber body for \(cue)")
+        }
+    }
+
+    func testBreathThemeUsesOnlyPureSineLayers() {
+        for cue in SoundCue.allCases {
+            let layers = SoundTheme.breath.recipe(for: cue).layers
+            XCTAssertTrue(
+                layers.allSatisfy { layer in
+                    if case let .tone(tone) = layer { return tone.waveform == .sine }
+                    return false
+                },
+                "Breath should remain noise-free and sine-based for \(cue)"
+            )
+            XCTAssertTrue(
+                layers.contains { layer in
+                    if case let .tone(tone) = layer { return tone.attack >= 0.012 }
+                    return false
+                },
+                "Breath needs at least one softened attack for \(cue)"
             )
         }
     }

@@ -55,7 +55,7 @@ struct ContentView: View {
 
                         DemoSection(
                             eyebrow: "01 · PALETTE",
-                            title: "Nine coherent sound worlds",
+                            title: "Twelve coherent sound worlds",
                             detail: "Signature+ is the most resolved; Wonderland is the strange one. Every cue keeps its meaning while changing material and character."
                         ) {
                             ThemeSelector(selection: $selectedTheme)
@@ -799,7 +799,7 @@ private struct HoverSoundExamples: View {
 private struct DesignPrinciplesCard: View {
     private let principles = [
         ("12×", "bounded variants"),
-        ("9", "sound themes"),
+        ("12", "sound themes"),
         ("0", "audio files"),
         ("∞", "custom recipes")
     ]
@@ -1100,7 +1100,9 @@ private extension SoundTheme {
     var demoBadge: String? {
         switch self {
         case .signature: "BEST"
+        case .breath: "CALM"
         case .wonderland: "WILD"
+        case .cuelume: "WEB"
         default: nil
         }
     }
@@ -1109,13 +1111,16 @@ private extension SoundTheme {
         switch self {
         case .tactile: "hand.tap.fill"
         case .soft: "cloud.fill"
+        case .breath: "wind"
         case .glass: "diamond.fill"
         case .playful: "music.note"
         case .signature: "sparkle"
         case .organic: "leaf.fill"
+        case .woodland: "tree.fill"
         case .kinetic: "bolt.fill"
         case .neon: "light.beacon.max.fill"
         case .wonderland: "party.popper.fill"
+        case .cuelume: "wave.3.right.circle.fill"
         }
     }
 
@@ -1123,13 +1128,16 @@ private extension SoundTheme {
         switch self {
         case .tactile: CueColor.sky.color
         case .soft: Color.white.opacity(0.72)
+        case .breath: Color(red: 0.55, green: 0.82, blue: 0.76)
         case .glass: CueColor.lilac.color
         case .playful: CueColor.amber.color
         case .signature: CueColor.mint.color
         case .organic: Color(red: 0.66, green: 0.78, blue: 0.42)
+        case .woodland: Color(red: 0.72, green: 0.5, blue: 0.28)
         case .kinetic: Color(red: 0.35, green: 0.82, blue: 1)
         case .neon: Color(red: 1, green: 0.3, blue: 0.78)
         case .wonderland: CueColor.coral.color
+        case .cuelume: Color(red: 1, green: 0.73, blue: 0.15)
         }
     }
 }

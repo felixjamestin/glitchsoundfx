@@ -22,19 +22,22 @@ Soundscape.shared.play(.success, theme: .glass)
 
 ## Sound themes
 
-Nine presets change the material of the complete palette while preserving semantic relationships such as open/close and forward/back:
+Twelve presets change the material of the complete palette while preserving semantic relationships such as open/close and forward/back:
 
 - `.tactile` — warm, physical, and balanced; the default.
 - `.soft` — darker, quieter, and damped for dense interfaces.
+- `.breath` — slow, pure, spacious tones for meditation and breathing experiences.
 - `.glass` — clean tonal pings with restrained shimmer and almost no noise.
 - `.playful` — brighter and lightly musical for expressive products.
 - `.signature` — the flagship palette and recommended upgrade: dimensional body, precise detail, subtle air, and an individually tuned semantic accent for every cue.
 - `.organic` — dry felt, wood, and paper-like textures with very little ambience.
+- `.woodland` — warm timber knocks, soft grain, and gently resonant natural percussion.
 - `.kinetic` — short, precise, rhythmic feedback for fast tools and spatial interfaces.
 - `.neon` — vivid high-frequency polish with a clean digital glow.
 - `.wonderland` — the deliberately unusual option: elastic bubbles, toy-creature chirps, odd pitch swoops, and tiny pentatonic phrases authored per interaction.
+- `.cuelume` — airy chimes, glides, droplets, and paper-like gestures ported from the Cuelume web palette.
 
-`Signature+` and `Wonderland` are deeper palettes rather than global tone/EQ transformations. Every one of their 18 cues receives a purpose-built accent or gesture.
+`Signature+`, `Breath`, `Woodland`, and `Wonderland` are deeper palettes rather than global tone/EQ transformations. Every one of their 18 cues receives a purpose-built accent or gesture.
 
 Set the default for an entire app:
 
@@ -88,7 +91,7 @@ Button("Save") { save() }
     )
 ```
 
-Use native Liquid Glass with the same press/release sound behavior:
+Use native Liquid Glass with release audio and optional press audio:
 
 ```swift
 Button("Glass action") {
@@ -98,6 +101,7 @@ Button("Glass action") {
 }
 .buttonStyle(
     LiquidGlassSoundButtonStyle(
+        press: .press,
         release: .sparkle,
         theme: .glass,
         tint: .purple,
@@ -133,6 +137,8 @@ Set either button shadow radius to `0` to disable that shadow. `shadowX`, `shado
 `hoverShadowX`, and `hoverShadowY` control the corresponding offsets. When
 `hoverShadowColor` is omitted, the hover shadow is derived from `hoverTint`,
 `tint`, or the accent color.
+The `press` cue defaults to `nil`, so no press sound is played unless one is
+provided. Release audio remains enabled by default.
 
 `LiquidGlassSoundButtonStyle` uses native Liquid Glass on iOS,
 macOS, tvOS, and watchOS 26 or later. It falls back to an adaptive material on

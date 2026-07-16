@@ -99,9 +99,9 @@ public struct SoundButtonStyle: ButtonStyle {
 }
 
 /// A sound-enabled button style that uses Liquid Glass on OS 26+
-/// and an adaptive material fallback on earlier releases.
+/// and an adaptive material fallback on earlier releases. Press audio is opt-in.
 public struct LiquidGlassSoundButtonStyle: ButtonStyle {
-    private let pressCue: SoundCue
+    private let pressCue: SoundCue?
     private let releaseCue: SoundCue
     private let theme: SoundTheme?
     private let tint: Color?
@@ -131,7 +131,7 @@ public struct LiquidGlassSoundButtonStyle: ButtonStyle {
 
     @MainActor
     public init(
-        press: SoundCue = .press,
+        press: SoundCue? = nil,
         release: SoundCue = .release,
         theme: SoundTheme? = nil,
         tint: Color? = nil,
@@ -413,7 +413,7 @@ private struct SoundButtonStyleBody: View {
 
 private struct LiquidGlassSoundButtonStyleBody: View {
     let configuration: ButtonStyle.Configuration
-    let pressCue: SoundCue
+    let pressCue: SoundCue?
     let releaseCue: SoundCue
     let theme: SoundTheme?
     let tint: Color?
@@ -569,7 +569,7 @@ private struct LiquidGlassSoundButtonStyleBody: View {
 
 private struct PressStateObserver: View {
     let isPressed: Bool
-    let pressCue: SoundCue
+    let pressCue: SoundCue?
     let releaseCue: SoundCue
     let theme: SoundTheme?
     let soundscape: Soundscape
@@ -580,7 +580,9 @@ private struct PressStateObserver: View {
             .onChange(of: isPressed) { _, newValue in
                 if newValue {
                     hasPressed = true
-                    soundscape.play(pressCue, theme: theme, intensity: 0.75)
+                    if let pressCue {
+                        soundscape.play(pressCue, theme: theme, intensity: 0.75)
+                    }
                 } else if hasPressed {
                     hasPressed = false
                     soundscape.play(releaseCue, theme: theme, intensity: 0.65)
