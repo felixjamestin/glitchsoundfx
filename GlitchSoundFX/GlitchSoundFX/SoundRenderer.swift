@@ -45,6 +45,14 @@ enum VariationGenerator {
 enum SoundRenderer {
     static let sampleRate = 44_100.0
 
+    /// Scales every rendered cue above the level the recipes were authored at. The per-cue
+    /// `masterGain` values land around 0.32–0.44, which peaks near 0.03 — far below the
+    /// `peakCeiling` limiter, so the palette read as too quiet at full system volume.
+    /// 3.2x is roughly +10dB, the point where the cues read as twice as loud rather than
+    /// merely measuring twice the amplitude. The limiter below still catches anything
+    /// this pushes too far.
+    static let outputBoost: Float = 3.2
+
     static func render(
         recipe: SoundRecipe,
         id: String,
@@ -95,7 +103,7 @@ enum SoundRenderer {
         applyDCBlocker(to: &samples)
         applyEdgeFades(to: &samples)
 
-        let master = recipe.masterGain
+        let master = recipe.masterGain * outputBoost
         let peak = samples.reduce(Float.zero) { current, sample in
             max(current, abs(sample * master))
         }
