@@ -24,8 +24,8 @@
             buildForAnalyzing = "YES">
             <BuildableReference
                BuildableIdentifier = "primary"
-               BlueprintIdentifier = "GlitchFX"
-               BuildableName = "GlitchFX"
+               BlueprintIdentifier = "GlitchSoundFX"
+               BuildableName = "GlitchSoundFX"
                ReferencedContainer = "container:">
             </BuildableReference>
          </BuildActionEntry>
@@ -42,8 +42,8 @@
             skipped = "NO">
             <BuildableReference
                BuildableIdentifier = "primary"
-               BlueprintIdentifier = "GlitchFXTests"
-               BuildableName = "GlitchFXTests"
+               BlueprintIdentifier = "GlitchSoundFXTests"
+               BuildableName = "GlitchSoundFXTests"
                ReferencedContainer = "container:">
             </BuildableReference>
          </TestableReference>
@@ -70,8 +70,8 @@
       <MacroExpansion>
          <BuildableReference
             BuildableIdentifier = "primary"
-            BlueprintIdentifier = "GlitchFX"
-            BuildableName = "GlitchFX"
+            BlueprintIdentifier = "GlitchSoundFX"
+            BuildableName = "GlitchSoundFX"
             ReferencedContainer = "container:">
          </BuildableReference>
       </MacroExpansion>

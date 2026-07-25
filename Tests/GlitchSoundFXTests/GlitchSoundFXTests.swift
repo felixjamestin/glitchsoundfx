@@ -1,9 +1,9 @@
 import AVFAudio
 import SwiftUI
 import XCTest
-@testable import GlitchFX
+@testable import GlitchSoundFX
 
-final class GlitchFXTests: XCTestCase {
+final class GlitchSoundFXTests: XCTestCase {
     @MainActor
     func testLiquidGlassStyleAcceptsAppearanceOptions() {
         _ = LiquidGlassSoundButtonStyle(
@@ -32,6 +32,28 @@ final class GlitchFXTests: XCTestCase {
             hoverAnimationDuration: 0.18
         )
         _ = LiquidGlassSoundButtonStyle(press: .press)
+    }
+
+    @MainActor
+    func testLiquidGlassStyleAcceptsEveryGlassVariant() {
+        for variant in GlassVariant.allCases {
+            _ = LiquidGlassSoundButtonStyle(glass: variant, tint: .purple)
+        }
+        XCTAssertEqual(GlassVariant.allCases.count, 3)
+        XCTAssertEqual(GlassVariant.clear.id, "clear")
+    }
+
+    @MainActor
+    func testLiquidGlassStyleAcceptsInteractiveGlass() {
+        for variant in GlassVariant.allCases {
+            for interactive in [true, false] {
+                _ = LiquidGlassSoundButtonStyle(
+                    glass: variant,
+                    interactive: interactive,
+                    tint: .purple
+                )
+            }
+        }
     }
 
     func testEveryCueHasAUsableRecipe() {

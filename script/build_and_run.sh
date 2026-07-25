@@ -2,8 +2,8 @@
 set -euo pipefail
 
 MODE="${1:-run}"
-APP_NAME="GlitchFX"
-BUNDLE_ID="com.example.GlitchFXShowcase"
+APP_NAME="GlitchSoundFX"
+BUNDLE_ID="com.example.GlitchSoundFXShowcase"
 
 ROOT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")/.." && pwd)"
 BUILD_DIR="$ROOT_DIR/build"
@@ -13,7 +13,7 @@ APP_BINARY="$APP_BUNDLE/Contents/MacOS/$APP_NAME"
 pkill -x "$APP_NAME" >/dev/null 2>&1 || true
 
 xcodebuild \
-  -project "$ROOT_DIR/GlitchFX.xcodeproj" \
+  -project "$ROOT_DIR/GlitchSoundFX.xcodeproj" \
   -scheme "$APP_NAME" \
   -destination "platform=macOS" \
   -derivedDataPath "$BUILD_DIR" \

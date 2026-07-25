@@ -1,7 +1,7 @@
 import SwiftUI
 import AppKit
 
-private final class GlitchFXAppDelegate: NSObject, NSApplicationDelegate {
+private final class GlitchSoundFXAppDelegate: NSObject, NSApplicationDelegate {
     func applicationDidFinishLaunching(_ notification: Notification) {
         NSApp.setActivationPolicy(.regular)
         NSApp.activate(ignoringOtherApps: true)
@@ -9,8 +9,8 @@ private final class GlitchFXAppDelegate: NSObject, NSApplicationDelegate {
 }
 
 @main
-struct GlitchFXShowcaseApp: App {
-    @NSApplicationDelegateAdaptor(GlitchFXAppDelegate.self) private var appDelegate
+struct GlitchSoundFXShowcaseApp: App {
+    @NSApplicationDelegateAdaptor(GlitchSoundFXAppDelegate.self) private var appDelegate
 
     var body: some Scene {
         WindowGroup {
@@ -205,7 +205,7 @@ struct ContentView: View {
                 .scrollIndicators(.hidden)
             }
             .foregroundStyle(.white)
-            .navigationTitle("GlitchFX Lab")
+            .navigationTitle("GlitchSoundFX Lab")
             .toolbar {
                 ToolbarItem(placement: .primaryAction) {
                     Button {

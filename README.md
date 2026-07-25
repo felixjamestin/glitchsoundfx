@@ -1,6 +1,6 @@
-# GlitchFX
+# GlitchSoundFX
 
-GlitchFX is a dependency-free SwiftUI interaction-sound framework and a working showcase app. It synthesizes its palette at runtime with `AVAudioEngine`, so there are no audio files to copy, license, or keep in sync.
+GlitchSoundFX is a dependency-free SwiftUI interaction-sound framework and a working showcase app. It synthesizes its palette at runtime with `AVAudioEngine`, so there are no audio files to copy, license, or keep in sync.
 
 The system follows the ideas in [The Sound of Software](https://notbor.ing/words/the-sound-of-software) and the small declarative/imperative surface demonstrated by [Cuelume](https://cuelume-site.pages.dev/): communicate rather than decorate, build related cue families, layer simple sources, pair sound with haptics, and break exact repetition with subtle variation.
 
@@ -9,7 +9,7 @@ The system follows the ideas in [The Sound of Software](https://notbor.ing/words
 Add this repository as a local or remote Swift Package and import the library:
 
 ```swift
-import GlitchFX
+import GlitchSoundFX
 import SwiftUI
 ```
 
@@ -104,6 +104,8 @@ Button("Glass action") {
         press: .press,
         release: .sparkle,
         theme: .glass,
+        glass: .clear,
+        interactive: true,
         tint: .purple,
         hoverTint: .pink,
         cornerRadius: 16,
@@ -139,6 +141,36 @@ Set either button shadow radius to `0` to disable that shadow. `shadowX`, `shado
 `tint`, or the accent color.
 The `press` cue defaults to `nil`, so no press sound is played unless one is
 provided. Release audio remains enabled by default.
+
+The `glass` parameter selects the material variant, mirroring SwiftUI's `Glass`
+presets while keeping the package's existing deployment targets:
+
+- `.regular` — standard Liquid Glass; the default. Falls back to `.regularMaterial`.
+- `.clear` — more transparent, letting more of the backdrop through. Falls back to `.ultraThinMaterial`.
+- `.identity` — no glass material at all; only `tint`, border, and shadows remain.
+
+```swift
+Button("Subtle") { performAction() }
+    .buttonStyle(LiquidGlassSoundButtonStyle(glass: .clear, tint: .purple))
+```
+
+`GlassVariant` is `CaseIterable` and `Identifiable`, so it can drive a picker
+directly. It is always available, even on releases before OS 26.
+
+The `interactive` parameter makes the glass respond to touch in real time —
+scaling and bouncing under a press, with light radiating from the touch point.
+It defaults to `true`, matching SwiftUI's own `Glass.interactive(_:)`, so a
+Liquid Glass button feels alive under a finger without extra configuration.
+Pass `false` for buttons that should stay visually still:
+
+```swift
+Button("Create") { create() }
+    .buttonStyle(LiquidGlassSoundButtonStyle(interactive: false, tint: .purple))
+```
+
+On releases without Liquid Glass, the style approximates the press response with
+the same scale and opacity motion `SoundButtonStyle` uses, so the parameter still
+means something on the fallback path.
 
 `LiquidGlassSoundButtonStyle` uses native Liquid Glass on iOS,
 macOS, tvOS, and watchOS 26 or later. It falls back to an adaptive material on
@@ -229,8 +261,8 @@ Soundscape.shared.play(recipe: archive, id: "archive", haptic: .rigid)
 
 ## Project layout
 
-- `GlitchFX/GlitchFX/` — portable package source
-- `GlitchFX/ContentView.swift` — showcase app
-- `Tests/GlitchFXTests/` — recipe, render-safety, and variation tests
+- `GlitchSoundFX/GlitchSoundFX/` — portable package source
+- `GlitchSoundFX/ContentView.swift` — showcase app
+- `Tests/GlitchSoundFXTests/` — recipe, render-safety, and variation tests
 
 The package targets iOS 17+, macOS 14+, tvOS 17+, watchOS 10+, and visionOS 1+.

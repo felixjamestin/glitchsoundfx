@@ -3,7 +3,7 @@
 import PackageDescription
 
 let package = Package(
-    name: "GlitchFX",
+    name: "GlitchSoundFX",
     platforms: [
         .iOS(.v17),
         .macOS(.v14),
@@ -12,16 +12,16 @@ let package = Package(
         .visionOS(.v1)
     ],
     products: [
-        .library(name: "GlitchFX", targets: ["GlitchFX"])
+        .library(name: "GlitchSoundFX", targets: ["GlitchSoundFX"])
     ],
     targets: [
         .target(
-            name: "GlitchFX",
-            path: "GlitchFX/GlitchFX"
+            name: "GlitchSoundFX",
+            path: "GlitchSoundFX/GlitchSoundFX"
         ),
         .testTarget(
-            name: "GlitchFXTests",
-            dependencies: ["GlitchFX"]
+            name: "GlitchSoundFXTests",
+            dependencies: ["GlitchSoundFX"]
         )
     ]
 )

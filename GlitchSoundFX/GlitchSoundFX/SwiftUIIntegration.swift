@@ -98,12 +98,31 @@ public struct SoundButtonStyle: ButtonStyle {
     }
 }
 
+/// The glass material variant used by `LiquidGlassSoundButtonStyle`.
+///
+/// Mirrors SwiftUI's `Glass` presets without naming that type at the API
+/// boundary, so the package keeps its existing deployment targets instead of
+/// requiring OS 26. Each case also maps to a sensible pre-26 fallback material.
+public enum GlassVariant: String, CaseIterable, Identifiable, Sendable {
+    /// Standard Liquid Glass. Falls back to `.regularMaterial`.
+    case regular
+    /// More transparent glass that lets more of the backdrop through.
+    /// Falls back to `.ultraThinMaterial`.
+    case clear
+    /// No glass material at all. Only the tint, border, and shadows remain.
+    case identity
+
+    public var id: String { rawValue }
+}
+
 /// A sound-enabled button style that uses Liquid Glass on OS 26+
 /// and an adaptive material fallback on earlier releases. Press audio is opt-in.
 public struct LiquidGlassSoundButtonStyle: ButtonStyle {
     private let pressCue: SoundCue?
     private let releaseCue: SoundCue
     private let theme: SoundTheme?
+    private let glass: GlassVariant
+    private let interactive: Bool
     private let tint: Color?
     private let hoverTint: Color?
     private let cornerRadius: CGFloat
@@ -134,6 +153,8 @@ public struct LiquidGlassSoundButtonStyle: ButtonStyle {
         press: SoundCue? = nil,
         release: SoundCue = .release,
         theme: SoundTheme? = nil,
+        glass: GlassVariant = .regular,
+        interactive: Bool = true,
         tint: Color? = nil,
         hoverTint: Color? = nil,
         cornerRadius: CGFloat = 16,
@@ -162,6 +183,8 @@ public struct LiquidGlassSoundButtonStyle: ButtonStyle {
         pressCue = press
         releaseCue = release
         self.theme = theme
+        self.glass = glass
+        self.interactive = interactive
         self.tint = tint
         self.hoverTint = hoverTint
         self.cornerRadius = max(0, cornerRadius)
@@ -194,6 +217,8 @@ public struct LiquidGlassSoundButtonStyle: ButtonStyle {
             pressCue: pressCue,
             releaseCue: releaseCue,
             theme: theme,
+            glass: glass,
+            interactive: interactive,
             tint: tint,
             hoverTint: hoverTint,
             cornerRadius: cornerRadius,
@@ -416,6 +441,8 @@ private struct LiquidGlassSoundButtonStyleBody: View {
     let pressCue: SoundCue?
     let releaseCue: SoundCue
     let theme: SoundTheme?
+    let glass: GlassVariant
+    let interactive: Bool
     let tint: Color?
     let hoverTint: Color?
     let cornerRadius: CGFloat
@@ -484,7 +511,7 @@ private struct LiquidGlassSoundButtonStyleBody: View {
             paddedLabel
                 .contentShape(.rect(cornerRadius: cornerRadius))
                 .glassEffect(
-                    .regular.tint(glassTint),
+                    resolvedGlass.tint(glassTint),
                     in: .rect(cornerRadius: cornerRadius)
                 )
         } else {
@@ -493,18 +520,57 @@ private struct LiquidGlassSoundButtonStyleBody: View {
         #endif
     }
 
+    // `Glass` is unavailable on visionOS entirely, so this mirrors the
+    // platform bracketing used by `styledLabel` above.
+    #if !os(visionOS)
+    @available(iOS 26.0, macOS 26.0, tvOS 26.0, watchOS 26.0, *)
+    private var resolvedGlass: Glass {
+        let base: Glass = switch glass {
+        case .regular: .regular
+        case .clear: .clear
+        case .identity: .identity
+        }
+        return base.interactive(interactive)
+    }
+    #endif
+
     private var fallbackLabel: some View {
         paddedLabel
             .contentShape(.rect(cornerRadius: cornerRadius))
-            .background(.regularMaterial, in: .rect(cornerRadius: cornerRadius))
+            .background { fallbackMaterial }
             .overlay {
                 ZStack {
                     RoundedRectangle(cornerRadius: cornerRadius)
                         .fill(fallbackTint)
-                    RoundedRectangle(cornerRadius: cornerRadius)
-                        .stroke(.white.opacity(0.14), lineWidth: 1)
+                    if glass != .identity {
+                        RoundedRectangle(cornerRadius: cornerRadius)
+                            .stroke(.white.opacity(0.14), lineWidth: 1)
+                    }
                 }
             }
+            // Liquid Glass renders its own press response on OS 26. This
+            // approximates it wherever the material fallback is used, matching
+            // the motion `SoundButtonStyle` already applies.
+            .scaleEffect(isPressedInteractively ? 0.975 : 1)
+            .opacity(isPressedInteractively ? 0.86 : 1)
+            .animation(.snappy(duration: 0.16), value: isPressedInteractively)
+    }
+
+    private var isPressedInteractively: Bool {
+        interactive && configuration.isPressed
+    }
+
+    /// Approximates each glass variant on releases without Liquid Glass.
+    @ViewBuilder
+    private var fallbackMaterial: some View {
+        switch glass {
+        case .regular:
+            RoundedRectangle(cornerRadius: cornerRadius).fill(.regularMaterial)
+        case .clear:
+            RoundedRectangle(cornerRadius: cornerRadius).fill(.ultraThinMaterial)
+        case .identity:
+            Color.clear
+        }
     }
 
     private var paddedLabel: some View {

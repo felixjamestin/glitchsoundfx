@@ -16,9 +16,9 @@
             <BuildableReference
                BuildableIdentifier = "primary"
                BlueprintIdentifier = "000000000000000100000000"
-               BuildableName = "GlitchFX.app"
-               BlueprintName = "GlitchFX"
-               ReferencedContainer = "container:GlitchFX.xcodeproj">
+               BuildableName = "GlitchSoundFX.app"
+               BlueprintName = "GlitchSoundFX"
+               ReferencedContainer = "container:GlitchSoundFX.xcodeproj">
             </BuildableReference>
          </BuildActionEntry>
       </BuildActionEntries>
@@ -44,9 +44,9 @@
          <BuildableReference
             BuildableIdentifier = "primary"
             BlueprintIdentifier = "000000000000000100000000"
-            BuildableName = "GlitchFX.app"
-            BlueprintName = "GlitchFX"
-            ReferencedContainer = "container:GlitchFX.xcodeproj">
+            BuildableName = "GlitchSoundFX.app"
+            BlueprintName = "GlitchSoundFX"
+            ReferencedContainer = "container:GlitchSoundFX.xcodeproj">
          </BuildableReference>
       </BuildableProductRunnable>
    </LaunchAction>
@@ -60,9 +60,9 @@
          <BuildableReference
             BuildableIdentifier = "primary"
             BlueprintIdentifier = "000000000000000100000000"
-            BuildableName = "GlitchFX.app"
-            BlueprintName = "GlitchFX"
-            ReferencedContainer = "container:GlitchFX.xcodeproj">
+            BuildableName = "GlitchSoundFX.app"
+            BlueprintName = "GlitchSoundFX"
+            ReferencedContainer = "container:GlitchSoundFX.xcodeproj">
          </BuildableReference>
       </BuildableProductRunnable>
    </ProfileAction>

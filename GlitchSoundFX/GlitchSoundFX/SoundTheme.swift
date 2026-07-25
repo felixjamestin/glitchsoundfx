@@ -553,7 +553,7 @@ public enum SoundTheme: String, CaseIterable, Identifiable, Sendable {
     }
 
     /// Verbatim ports of Cuelume's Web Audio cues (cuelume-site.pages.dev), mapped onto the
-    /// nearest GlitchFX cue: chime→notify, droplet→select, loading→open/close, page→forward/
+    /// nearest GlitchSoundFX cue: chime→notify, droplet→select, loading→open/close, page→forward/
     /// backward, ready→confirm, whisper grounds delete. Cuelume's shimmer becomes echo, its
     /// per-layer peak becomes gain, and its filterQ becomes resonance.
     private func cuelumeRecipe(for cue: SoundCue) -> SoundRecipe {
