@@ -31,9 +31,13 @@ public enum SoundCue: String, CaseIterable, Identifiable, Sendable {
                 .tone(.init(frequency: 2_600, decay: 0.025, gain: 0.025))
             ], masterGain: 0.42)
         case .press:
+            // The Glitch Design System's slider click, ported layer for
+            // layer: a 1 400 Hz ping with a fast decay and a one-millisecond
+            // noise onset. The renderer's own pitch variation stands in for
+            // the original's five pitched variants.
             return .init(layers: [
-                .noise(.init(frequency: 1_550, resonance: 1.4, decay: 0.026, gain: 0.14)),
-                .tone(.init(frequency: 118, glideTo: 92, decay: 0.045, gain: 0.025))
+                .noise(.init(frequency: 2_600, resonance: 0.7, decay: 0.004, gain: 0.035)),
+                .tone(.init(frequency: 1_400, attack: 0.002, decay: 0.028, gain: 0.031))
             ], masterGain: 0.46)
         case .release:
             return .init(layers: [

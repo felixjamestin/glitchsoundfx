@@ -564,9 +564,9 @@ public enum SoundTheme: String, CaseIterable, Identifiable, Sendable {
                 .tone(.init(frequency: 2_600, attack: 0.001, decay: 0.012, gain: 0.018))
             ], masterGain: 0.4)
         case .press:
-            return .init(layers: [
-                .noise(.init(frequency: 1_700, resonance: 1.4, attack: 0.001, decay: 0.02, gain: 0.13))
-            ], masterGain: 0.4)
+            // Deliberately identical to the base cue: the commit click is the
+            // product's tactile signature and stays theme-neutral.
+            return cue.recipe
         case .release:
             return .init(layers: [
                 .noise(.init(frequency: 4_600, resonance: 1.8, attack: 0.001, decay: 0.016, gain: 0.12)),
