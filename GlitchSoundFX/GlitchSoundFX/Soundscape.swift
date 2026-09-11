@@ -194,7 +194,6 @@ public final class Soundscape: ObservableObject {
         playbackToken &+= 1
         let token = playbackToken
         idleController.playbackStarted(voice: voiceIndex, token: token)
-        voice.stop()
         voice.volume = Float(min(max(intensity, 0), 1)) * variation.gainMultiplier
         voice.pan = variation.pan
         voice.scheduleBuffer(buffer, at: nil, options: .interrupts, completionCallbackType: .dataPlayedBack) { @Sendable [weak self] _ in
