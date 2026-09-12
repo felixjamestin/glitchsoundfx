@@ -55,7 +55,7 @@ struct ContentView: View {
 
                         DemoSection(
                             eyebrow: "01 · PALETTE",
-                            title: "Twelve coherent sound worlds",
+                            title: "\(SoundTheme.allCases.count) coherent sound worlds",
                             detail: "Signature+ is the most resolved; Wonderland is the strange one. Every cue keeps its meaning while changing material and character."
                         ) {
                             ThemeSelector(selection: $selectedTheme)
@@ -799,7 +799,7 @@ private struct HoverSoundExamples: View {
 private struct DesignPrinciplesCard: View {
     private let principles = [
         ("12×", "bounded variants"),
-        ("12", "sound themes"),
+        (String(SoundTheme.allCases.count), "sound themes"),
         ("0", "audio files"),
         ("∞", "custom recipes")
     ]
@@ -1103,6 +1103,7 @@ private extension SoundTheme {
         case .breath: "CALM"
         case .wonderland: "WILD"
         case .cuelume: "WEB"
+        case .procedural: "WEB"
         default: nil
         }
     }
@@ -1121,6 +1122,7 @@ private extension SoundTheme {
         case .neon: "light.beacon.max.fill"
         case .wonderland: "party.popper.fill"
         case .cuelume: "wave.3.right.circle.fill"
+        case .procedural: "waveform.path"
         }
     }
 
@@ -1138,6 +1140,7 @@ private extension SoundTheme {
         case .neon: Color(red: 1, green: 0.3, blue: 0.78)
         case .wonderland: CueColor.coral.color
         case .cuelume: Color(red: 1, green: 0.73, blue: 0.15)
+        case .procedural: Color(red: 0.43, green: 0.64, blue: 1)
         }
     }
 }

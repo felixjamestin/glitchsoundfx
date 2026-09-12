@@ -26,6 +26,8 @@ public enum SoundTheme: String, CaseIterable, Identifiable, Sendable {
     case wonderland
     /// The Cuelume web palette: airy chimes, glides, droplets, and paper, ported note for note.
     case cuelume
+    /// Clear taps, pitch slides, and short melodies from Procedural Sounds.
+    case procedural
 
     public var id: String { rawValue }
 
@@ -43,6 +45,7 @@ public enum SoundTheme: String, CaseIterable, Identifiable, Sendable {
         case .neon: "Neon"
         case .wonderland: "Wonderland"
         case .cuelume: "Cuelume"
+        case .procedural: "Procedural"
         }
     }
 
@@ -60,6 +63,7 @@ public enum SoundTheme: String, CaseIterable, Identifiable, Sendable {
         case .neon: "Vivid and digitally polished"
         case .wonderland: "Elastic, strange, and joyfully alive"
         case .cuelume: "Chimes, glides, and droplets"
+        case .procedural: "Clear taps, soft slides, and melodic signals"
         }
     }
 
@@ -168,6 +172,8 @@ public enum SoundTheme: String, CaseIterable, Identifiable, Sendable {
             return wonderlandRecipe(for: cue, base: base)
         case .cuelume:
             return cuelumeRecipe(for: cue)
+        case .procedural:
+            return proceduralRecipe(for: cue)
         }
     }
 

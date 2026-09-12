@@ -22,7 +22,7 @@ Soundscape.shared.play(.success, theme: .glass)
 
 ## Sound themes
 
-Twelve presets change the material of the complete palette while preserving semantic relationships such as open/close and forward/back:
+Thirteen presets change the material of the complete palette while preserving semantic relationships such as open/close and forward/back:
 
 - `.tactile` — warm, physical, and balanced; the default.
 - `.soft` — darker, quieter, and damped for dense interfaces.
@@ -36,6 +36,12 @@ Twelve presets change the material of the complete palette while preserving sema
 - `.neon` — vivid high-frequency polish with a clean digital glow.
 - `.wonderland` — the deliberately unusual option: elastic bubbles, toy-creature chirps, odd pitch swoops, and tiny pentatonic phrases authored per interaction.
 - `.cuelume` — airy chimes, glides, droplets, and paper-like gestures ported from the Cuelume web palette.
+- `.procedural` — clear taps, soft pitch slides, melodic confirmations, and triangle-wave alerts adapted from [Procedural Sounds](https://procedural-sounds.vercel.app/).
+
+Select **Procedural** in the showcase or use `Soundscape.shared.play(.success, theme: .procedural)`.
+The theme covers all 18 cues with selected source patches and related opposite-action variants.
+It uses native synthesis with adjusted envelopes and gains, so playback needs no network or audio files.
+Source mappings, adaptation details, and the MIT license are in [THIRD-PARTY-NOTICES.md](THIRD-PARTY-NOTICES.md).
 
 `Signature+`, `Breath`, `Woodland`, and `Wonderland` are deeper palettes rather than global tone/EQ transformations. Every one of their 18 cues receives a purpose-built accent or gesture.
 
