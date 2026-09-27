@@ -16,12 +16,17 @@ let package = Package(
     ],
     targets: [
         .target(
+            name: "GlitchSoundFXExceptions",
+            path: "GlitchSoundFX/GlitchSoundFXExceptions"
+        ),
+        .target(
             name: "GlitchSoundFX",
+            dependencies: ["GlitchSoundFXExceptions"],
             path: "GlitchSoundFX/GlitchSoundFX"
         ),
         .testTarget(
             name: "GlitchSoundFXTests",
-            dependencies: ["GlitchSoundFX"]
+            dependencies: ["GlitchSoundFX", "GlitchSoundFXExceptions"]
         )
     ]
 )

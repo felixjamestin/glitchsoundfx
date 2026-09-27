@@ -1,6 +1,9 @@
 import AVFAudio
 import Combine
 import Foundation
+#if canImport(GlitchSoundFXExceptions)
+import GlitchSoundFXExceptions
+#endif
 
 #if os(iOS)
 import UIKit
@@ -201,7 +204,13 @@ public final class Soundscape: ObservableObject {
                 self?.idleController.playbackFinished(voice: voiceIndex, token: token)
             }
         }
-        voice.play()
+        if GSFXCatchException({ voice.play() }) != nil {
+            // The output stopped without telling the engine, so drop this cue and restart on the next one.
+            voice.stop()
+            idleController.playbackFinished(voice: voiceIndex, token: token)
+            engine.stop()
+            return
+        }
         voiceAvailableAt[voiceIndex] = ProcessInfo.processInfo.systemUptime + bufferDuration + 0.01
     }
 
